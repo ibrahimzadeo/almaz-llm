@@ -45,7 +45,7 @@ nav.landing-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(to bottom, rgba(10, 11, 13, 0.95), transparent);
+    background: linear-gradient(to bottom, rgba(11, 16, 48, 0.96), transparent);
     backdrop-filter: blur(10px);
 }
 
@@ -98,21 +98,34 @@ nav.landing-nav {
 }
 
 .nav-cta {
-    background: transparent;
+    background: var(--gold);
     border: 1px solid var(--gold);
-    color: var(--gold);
-    padding: 0.75rem 2rem;
+    color: #17040A;
+    padding: 0.7rem 1.6rem;
     font-family: var(--font-sans);
-    font-size: 0.8rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 2px;
+    text-decoration: none;
     cursor: pointer;
-    transition: all 0.4s ease;
+    transition: all 0.3s ease;
 }
 
 .nav-cta:hover {
-    background: var(--gold);
-    color: var(--midnight);
+    background: var(--gold-light);
+    border-color: var(--gold-light);
+}
+
+/* Mobile menu toggle — hidden on desktop, revealed with the nav links below */
+.nav-toggle {
+    display: none;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    color: var(--pearl);
+    padding: 0.55rem 0.7rem;
+    cursor: pointer;
+    line-height: 0;
 }
 
 /* Hero Section */
@@ -135,9 +148,9 @@ nav.landing-nav {
     right: 0;
     bottom: 0;
     background: 
-        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(201, 169, 98, 0.15), transparent),
-        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(78, 205, 196, 0.05), transparent),
-        radial-gradient(ellipse 50% 30% at 20% 80%, rgba(201, 169, 98, 0.08), transparent);
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255, 77, 46, 0.20), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(23, 212, 230, 0.10), transparent),
+        radial-gradient(ellipse 50% 30% at 20% 80%, rgba(255, 182, 39, 0.10), transparent);
     z-index: 0;
 }
 
@@ -150,7 +163,7 @@ nav.landing-nav {
     width: 800px;
     height: 800px;
     opacity: 0.04;
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0L100 50L50 100L0 50Z' fill='none' stroke='%23C9A962' stroke-width='0.5'/%3E%3Cpath d='M50 20L80 50L50 80L20 50Z' fill='none' stroke='%23C9A962' stroke-width='0.5'/%3E%3Ccircle cx='50' cy='50' r='10' fill='none' stroke='%23C9A962' stroke-width='0.5'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0L100 50L50 100L0 50Z' fill='none' stroke='%23FF4D2E' stroke-width='0.5'/%3E%3Cpath d='M50 20L80 50L50 80L20 50Z' fill='none' stroke='%23FF4D2E' stroke-width='0.5'/%3E%3Ccircle cx='50' cy='50' r='10' fill='none' stroke='%23FF4D2E' stroke-width='0.5'/%3E%3C/svg%3E");
     animation: rotate-slow 120s linear infinite;
 }
 
@@ -170,8 +183,8 @@ nav.landing-nav {
     align-items: center;
     gap: 0.75rem;
     padding: 0.5rem 1.25rem;
-    background: rgba(201, 169, 98, 0.1);
-    border: 1px solid rgba(201, 169, 98, 0.3);
+    background: rgba(255, 77, 46, 0.1);
+    border: 1px solid rgba(255, 77, 46, 0.3);
     border-radius: 100px;
     font-size: 0.75rem;
     letter-spacing: 0.15em;
@@ -199,7 +212,9 @@ nav.landing-nav {
 .hero h1 {
     font-family: var(--font-display);
     font-size: clamp(3.5rem, 10vw, 8rem);
-    font-weight: 300;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
     line-height: 1;
     margin-bottom: 1.5rem;
     animation: fade-in-up 1s ease 0.2s forwards;
@@ -207,9 +222,11 @@ nav.landing-nav {
 }
 
 .hero h1 .accent {
-    color: var(--gold);
-    font-style: italic;
-    font-weight: 400;
+    background: linear-gradient(96deg, var(--gold), var(--saffron));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 600;
 }
 
 .hero h1 .azerbaijani {
@@ -241,15 +258,15 @@ nav.landing-nav {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-    color: var(--midnight);
-    padding: 1.1rem 3rem;
+    background: var(--gold);
+    color: #17040A;
+    padding: 1.05rem 2.6rem;
     font-family: var(--font-sans);
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    letter-spacing: 0;
     border: none;
+    border-radius: 2px;
     cursor: pointer;
     transition: all 0.4s ease;
     position: relative;
@@ -275,28 +292,37 @@ nav.landing-nav {
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 40px rgba(201, 169, 98, 0.3);
+    box-shadow: 0 10px 40px rgba(255, 77, 46, 0.35);
 }
 
+/* Secondary drops well below the primary in weight, so the page asks the
+   reader to make one decision rather than two. */
 .btn-secondary {
     background: transparent;
-    color: var(--pearl);
-    padding: 1.1rem 3rem;
+    color: var(--accent-teal);
+    padding: 1.05rem 2.6rem;
     font-family: var(--font-sans);
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border: 1px solid var(--silver);
+    letter-spacing: 0;
+    border: 1px solid var(--line);
+    border-radius: 2px;
     cursor: pointer;
-    transition: all 0.4s ease;
+    transition: all 0.3s ease;
     text-decoration: none;
     display: inline-block;
 }
 
 .btn-secondary:hover {
-    border-color: var(--gold);
-    color: var(--gold);
+    border-color: var(--accent-teal);
+    background: rgba(23, 212, 230, 0.08);
+}
+
+/* Keyboard focus must stay visible everywhere. */
+a:focus-visible,
+button:focus-visible {
+    outline: 2px solid var(--accent-teal);
+    outline-offset: 3px;
 }
 
 @keyframes fade-in-up {
@@ -357,41 +383,36 @@ nav.landing-nav {
     margin: 0 auto;
 }
 
+/* Each stat is tied to a section by the colour of its rule, which gives the
+   row a reading order the old equal-weight hairlines did not. */
 .stat-item {
-    text-align: center;
-    padding: 2rem;
+    text-align: left;
+    padding: 1.25rem 0 0;
     position: relative;
+    border-top: 2px solid var(--gold);
 }
 
-.stat-item::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 60%;
-    width: 1px;
-    background: linear-gradient(to bottom, transparent, var(--gold-dark), transparent);
-}
-
-.stat-item:last-child::after {
-    display: none;
-}
+/* Cycles the three accents; --gold-light sat too close to --gold to read as
+   a distinct fourth. */
+.stat-item:nth-child(2) { border-top-color: var(--saffron); }
+.stat-item:nth-child(3) { border-top-color: var(--accent-teal); }
+.stat-item:nth-child(4) { border-top-color: var(--gold); }
 
 .stat-number {
-    font-family: var(--font-sans);
-    font-size: 3.5rem;
-    font-weight: 300;
-    color: var(--gold);
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(2.2rem, 4vw, 3rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    color: var(--pearl);
     line-height: 1;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
 }
 
 .stat-label {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     color: var(--silver);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    line-height: 1.4;
 }
 
 /* About Section */
@@ -423,7 +444,7 @@ nav.landing-nav {
     width: 350px;
     height: 350px;
     background: linear-gradient(135deg, var(--charcoal), var(--slate));
-    border: 1px solid rgba(201, 169, 98, 0.3);
+    border: 1px solid rgba(255, 77, 46, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -434,16 +455,18 @@ nav.landing-nav {
     content: 'الماز';
     font-family: var(--font-sans);
     font-size: 4rem;
-    color: var(--gold);
+    /* Saffron rather than flame: flame at 0.8 on the diamond's own indigo face
+       fell to roughly 3:1 and read as muddy brick. */
+    color: var(--saffron);
     transform: rotate(-45deg);
-    opacity: 0.8;
+    opacity: 0.9;
 }
 
 .about-diamond::after {
     content: '';
     position: absolute;
     inset: -20px;
-    border: 1px solid rgba(201, 169, 98, 0.15);
+    border: 1px solid rgba(255, 77, 46, 0.15);
     transform: rotate(0deg);
 }
 
@@ -459,7 +482,7 @@ nav.landing-nav {
     transform: translate(-50%, -50%);
     width: 500px;
     height: 500px;
-    border: 1px dashed rgba(201, 169, 98, 0.2);
+    border: 1px dashed rgba(255, 77, 46, 0.2);
     border-radius: 50%;
     animation: rotate-slow 60s linear infinite reverse;
 }
@@ -477,15 +500,16 @@ nav.landing-nav {
 
 .about-content h2 {
     font-family: var(--font-display);
-    font-size: 3.5rem;
-    font-weight: 300;
+    font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
     margin-bottom: 2rem;
-    line-height: 1.2;
+    line-height: 1.15;
 }
 
 .about-content h2 span {
     color: var(--gold);
-    font-style: italic;
 }
 
 .about-content p {
@@ -509,22 +533,23 @@ nav.landing-nav {
 }
 
 .feature-icon {
-    width: 40px;
-    height: 40px;
-    background: rgba(201, 169, 98, 0.1);
-    border: 1px solid rgba(201, 169, 98, 0.3);
+    width: 42px;
+    height: 42px;
+    background: rgba(255, 77, 46, 0.1);
+    border: 1px solid rgba(255, 77, 46, 0.35);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--gold);
-    font-size: 1.2rem;
+    font-size: 1.35rem;
+    line-height: 1;
     flex-shrink: 0;
 }
 
 .feature-text h4 {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     font-weight: 600;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.3rem;
     color: var(--pearl);
 }
 
@@ -549,18 +574,22 @@ nav.landing-nav {
 }
 
 .section-label {
+    font-family: var(--font-mono);
     font-size: 0.75rem;
-    letter-spacing: 0.3em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--accent-teal);
     margin-bottom: 1rem;
     display: block;
 }
 
 .section-header h2 {
     font-family: var(--font-display);
-    font-size: 3rem;
-    font-weight: 300;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    line-height: 1.15;
     margin-bottom: 1.5rem;
 }
 
@@ -582,54 +611,37 @@ nav.landing-nav {
     padding: 2.5rem;
     position: relative;
     overflow: hidden;
+    border-left: 2px solid var(--gold);
     transition: transform 0.4s ease, box-shadow 0.4s ease;
-}
-
-.data-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--gold), var(--accent-teal));
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.4s ease;
 }
 
 .data-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-}
-
-.data-card:hover::before {
-    transform: scaleX(1);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
 .data-card-icon {
-    width: 50px;
-    height: 50px;
-    background: rgba(201, 169, 98, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    color: var(--gold);
     margin-bottom: 1.5rem;
-    font-size: 1.5rem;
+    display: block;
 }
 
 .data-card h3 {
     font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 400;
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--pearl);
     margin-bottom: 0.75rem;
 }
 
 .data-card .data-stat {
-    font-size: 2rem;
-    color: var(--gold);
-    font-family: var(--font-sans);
-    font-weight: 300;
+    font-size: 1.9rem;
+    color: var(--saffron);
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.03em;
+    font-weight: 500;
     margin-bottom: 0.5rem;
 }
 
@@ -637,6 +649,28 @@ nav.landing-nav {
     color: var(--silver);
     font-size: 0.9rem;
     line-height: 1.6;
+}
+
+/* Proportion bar — so 651M against 94M reads as a difference rather than
+   as two identically sized boxes. */
+.corpus-bar {
+    height: 4px;
+    background: var(--midnight);
+    margin-top: 1.25rem;
+}
+
+.corpus-bar > i {
+    display: block;
+    height: 100%;
+    background: var(--saffron);
+}
+
+.corpus-cap {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    margin-top: 0.5rem;
 }
 
 /* Benchmark Section */
@@ -656,8 +690,11 @@ nav.landing-nav {
 
 .benchmark-text h2 {
     font-family: var(--font-display);
-    font-size: 3rem;
-    font-weight: 300;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    line-height: 1.15;
     margin-bottom: 1.5rem;
 }
 
@@ -678,7 +715,7 @@ nav.landing-nav {
 
 .benchmark-list li {
     padding: 1rem 0;
-    border-bottom: 1px solid rgba(201, 169, 98, 0.15);
+    border-bottom: 1px solid rgba(255, 77, 46, 0.15);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -694,9 +731,12 @@ nav.landing-nav {
 }
 
 .benchmark-value {
-    font-family: var(--font-sans);
-    font-size: 1.5rem;
-    color: var(--gold);
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 1.35rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--saffron);
 }
 
 .benchmark-visual {
@@ -719,19 +759,24 @@ nav.landing-nav {
 .bar-label {
     display: flex;
     justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
     margin-bottom: 0.5rem;
-    font-size: 0.85rem;
+    font-size: 0.88rem;
+    color: var(--pearl);
 }
 
 .bar-label span:last-child {
-    color: var(--gold);
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--saffron);
+    white-space: nowrap;
 }
 
 .bar-track {
-    height: 8px;
+    height: 10px;
     background: var(--slate);
     position: relative;
-    overflow: hidden;
 }
 
 .bar-fill {
@@ -739,8 +784,29 @@ nav.landing-nav {
     top: 0;
     left: 0;
     height: 100%;
-    background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+    background: linear-gradient(90deg, var(--gold), var(--saffron));
     transition: width 1.5s ease;
+}
+
+/* Zero baseline. Every bar in the group shares one axis, so the widths mean
+   something — see .bar-scale for the axis they are read against. */
+.bar-zero {
+    position: absolute;
+    top: -3px;
+    bottom: -3px;
+    left: 0;
+    width: 1px;
+    background: var(--accent-teal);
+}
+
+.bar-scale {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    margin-top: 0.6rem;
 }
 
 /* Applications Section */
@@ -755,7 +821,7 @@ nav.landing-nav {
     gap: 1px;
     max-width: 1200px;
     margin: 0 auto;
-    background: rgba(201, 169, 98, 0.2);
+    background: var(--line);
 }
 
 .app-card {
@@ -789,14 +855,22 @@ nav.landing-nav {
 }
 
 .app-icon {
-    font-size: 2rem;
+    color: var(--accent-teal);
     margin-bottom: 1.5rem;
+    display: block;
+    transition: color 0.4s ease;
+}
+
+.app-card:hover .app-icon {
+    color: var(--gold);
 }
 
 .app-card h3 {
     font-family: var(--font-display);
-    font-size: 1.4rem;
-    font-weight: 400;
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--pearl);
     margin-bottom: 1rem;
 }
 
@@ -818,7 +892,7 @@ nav.landing-nav {
     position: absolute;
     inset: 0;
     background: 
-        radial-gradient(ellipse 50% 50% at 50% 50%, rgba(201, 169, 98, 0.1), transparent);
+        radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255, 77, 46, 0.1), transparent);
 }
 
 .cta-content {
@@ -830,14 +904,19 @@ nav.landing-nav {
 
 .cta-content h2 {
     font-family: var(--font-display);
-    font-size: 3.5rem;
-    font-weight: 300;
+    font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    line-height: 1.15;
     margin-bottom: 1.5rem;
 }
 
 .cta-content h2 span {
-    color: var(--gold);
-    font-style: italic;
+    background: linear-gradient(96deg, var(--gold), var(--saffron));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
 .cta-content p {
@@ -850,7 +929,7 @@ nav.landing-nav {
 footer {
     padding: 4rem;
     background: var(--charcoal);
-    border-top: 1px solid rgba(201, 169, 98, 0.1);
+    border-top: 1px solid rgba(255, 77, 46, 0.1);
 }
 
 .footer-content {
@@ -890,22 +969,104 @@ footer {
     color: var(--gold);
 }
 
+/* Scroll-reveal: the hidden state lives here rather than being applied by JS
+   after first paint, which used to make cards appear and then blink out. */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* If JavaScript never runs, the content must still be readable. */
+.no-js .reveal {
+    opacity: 1;
+    transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .reveal {
+        opacity: 1;
+        transform: none;
+    }
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
     nav.landing-nav {
         padding: 1rem 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
     }
 
+    .nav-toggle {
+        display: block;
+        order: 3;
+    }
+
+    /* The closed nav fades to transparent at its foot, which let the hero
+       text show through the open menu panel. Go opaque while it is open. */
+    nav.landing-nav.is-menu-open {
+        background: var(--midnight);
+        border-bottom: 1px solid var(--line);
+    }
+
+    .nav-cta {
+        order: 2;
+        margin-left: auto;
+    }
+
+    /* Was `display: none` with nothing to replace it, which left mobile with
+       no way to reach any section anchor. */
     .nav-links {
         display: none;
+        order: 4;
+        flex-basis: 100%;
+        flex-direction: column;
+        gap: 0;
+        padding-top: 0.5rem;
+        border-top: 1px solid var(--line);
+    }
+
+    .nav-links.is-open {
+        display: flex;
+    }
+
+    .nav-links li {
+        border-bottom: 1px solid var(--line);
+    }
+
+    .nav-links li:last-child {
+        border-bottom: none;
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 0.9rem 0;
+        font-size: 0.95rem;
+        letter-spacing: 0;
+        text-transform: none;
     }
 
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
-    }
-
-    .stat-item:nth-child(2)::after {
-        display: none;
     }
 
     .about-grid,
@@ -932,10 +1093,6 @@ footer {
 
     .stats-grid {
         grid-template-columns: 1fr;
-    }
-
-    .stat-item::after {
-        display: none;
     }
 
     .about-features {

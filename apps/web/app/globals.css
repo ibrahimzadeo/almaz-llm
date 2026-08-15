@@ -3,21 +3,46 @@
 @tailwind utilities;
 
 :root {
-  /* ALMAZ Premium Palette */
-  --midnight: #0A0B0D;
-  --midnight-light: #16181D;
-  --midnight-lighter: #1E2026;
-  --gold: #C9A962;
-  --gold-light: #E0C78A;
-  --gold-dark: #A68B4D;
-  --silver: #A8AAB0;
-  --pearl: #F5F5F7;
-  --accent-teal: #4ECDC4;
-  
+  /* ALMAZ — "Odlar" palette.
+     Drawn from Quba carpet dye (indigo ground, madder, saffron) and the
+     flames of Yanar Dag. The ground carries a hue rather than being neutral.
+
+     The --gold / --silver / --pearl names are kept as the accent / body /
+     heading slots so existing references and the Tailwind theme re-skin
+     without a rename sweep. Prefer the semantic aliases in new code. */
+
+  /* Ground — indigo, darkest to lightest */
+  --midnight: #0B1030;
+  --midnight-light: #101540;
+  --midnight-lighter: #151B4A;
+  --charcoal: #101540;        /* alias: alternating section band */
+  --slate: #151B4A;           /* alias: raised card surface */
+  --line: #262E6B;            /* hairlines and borders */
+
+  /* Accent — flame. Large text, rules and the primary action only (4.8:1). */
+  --gold: #FF4D2E;
+  --gold-light: #FF7A5E;
+  --gold-dark: #E03415;
+  --flame: var(--gold);
+
+  /* Figures — saffron (9.0:1) */
+  --saffron: #FFB627;
+
+  /* Structure — turquoise: links, eyebrows, baselines, focus rings (8.7:1) */
+  --accent-teal: #17D4E6;
+  --turquoise: var(--accent-teal);
+
+  /* Neutrals, biased toward the indigo ground */
+  --silver: #B6BEE0;          /* body copy (8.4:1) */
+  --pearl: #F4F6FF;           /* headings (14.4:1) */
+  --muted: #7F88B8;           /* captions and metadata (4.9:1) */
+  --mist: var(--silver);
+
   /* Typography Variables (from Next.js fonts) */
-  --font-display: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  --font-body: var(--font-dm-sans), 'DM Sans', -apple-system, sans-serif;
-  --font-sans: var(--font-open-sans), 'Open Sans', Arial, 'Proxima Nova', sans-serif;
+  --font-display: var(--font-fraunces), 'Fraunces', 'Hoefler Text', Georgia, serif;
+  --font-body: var(--font-plex-sans), 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-plex-sans), 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 }
 
 * {
@@ -47,9 +72,15 @@ body {
 ::-webkit-scrollbar-thumb {
   background: var(--midnight-lighter);
   border-radius: 3px;
-  border: 1px solid rgba(201, 169, 98, 0.1);
+  border: 1px solid rgba(255, 77, 46, 0.15);
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--gold-dark);
+}
+
+/* Figures line up in columns wherever they are set in the data face */
+.tabular {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
