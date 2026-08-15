@@ -1,112 +1,265 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
-import { Cormorant_Garamond } from 'next/font/google'
+import { useEffect, useState } from 'react'
+import Glyph from '@/components/Glyph'
 import '../landing.css'
 
-const cormorant = Cormorant_Garamond({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-cormorant'
-})
+/* Every discipline delta is measured in the same unit — percentage points over
+   the baseline model — so they share one axis. AXIS_MAX is that axis; the bar
+   widths are derived from it rather than picked to look full. */
+const AXIS_MAX = 20
+
+const DISCIPLINES = [
+  { name: 'Riyaziyyat və Məntiq', delta: 12 },
+  { name: 'Elm və Texnologiya', delta: 14 },
+  { name: 'Tarix və Mədəniyyət', delta: 11 },
+  { name: 'Hüquq və Hökumət', delta: 15 },
+  { name: 'Dil və Ədəbiyyat', delta: 13 },
+]
+
+/* Mixed-unit targets can't share the bars' axis, so they are stated as
+   target-and-outcome rows instead of being drawn as comparable lengths. */
+const TARGETS = [
+  { name: 'Tokenization Fertility', target: '≤ 2.2' },
+  { name: 'TUMLU Composite Score', target: '+10% baseline' },
+  { name: 'Instruction Following', target: '≥ 85%' },
+  { name: 'NLU Task Performance', target: '+8% kompozit' },
+]
+
+/* Corpus sizes are shown proportionally against the largest source, so the
+   scale difference between them is visible rather than implied. */
+const CORPUS_MAX = 651
+
+const CORPUS = [
+  {
+    glyph: 'corpus' as const,
+    title: 'Əsas LLM korpusu',
+    stat: '651M söz',
+    share: 651,
+    caption: 'Korpusun ən böyük hissəsi',
+    body: 'Wikipedia, xəbərlər, bloqlar, kitablar və hüquqi sənədlərdən ibarət seçilmiş korpus.',
+  },
+  {
+    glyph: 'literature' as const,
+    title: 'Ədəbi irs',
+    stat: '180M söz',
+    share: 180,
+    caption: '3,600+ klassik və müasir kitab',
+    body: 'Klassik və müasir Azərbaycan ədəbiyyatının rəqəmsallaşdırılmış toplusu.',
+  },
+  {
+    glyph: 'web' as const,
+    title: 'Veb miqyaslı kolleksiya',
+    stat: '94M söz',
+    share: 94,
+    caption: 'Təmizlənmiş və təkrarsızlaşdırılmış',
+    body: 'Müxtəlif veb məzmunu, keyfiyyət filtrindən keçirilmiş.',
+  },
+  {
+    glyph: 'archive' as const,
+    title: 'Sənəd arxivi',
+    stat: '1.9M sənəd',
+    share: null,
+    caption: 'Onillikləri əhatə edir',
+    body: 'Xəbərlər, akademik jurnallar, kitablar və dövri nəşrlər.',
+  },
+  {
+    glyph: 'legal' as const,
+    title: 'Hüquqi və qanunvericilik',
+    stat: 'Tam əhatə',
+    share: null,
+    caption: 'Qüvvədə olan mətnlər',
+    body: 'Qanunlar, qaydalar və konstitusiya sənədlərinin tam dəstəyi.',
+  },
+  {
+    glyph: 'specialized' as const,
+    title: 'İxtisaslaşmış məlumatlar',
+    stat: 'Ekspert seçimi',
+    share: null,
+    caption: 'NER · təsnifat · sual-cavab',
+    body: 'Xüsusi tapşırıqlar üçün əl ilə hazırlanmış məlumat setləri.',
+  },
+]
+
+const APPLICATIONS = [
+  {
+    glyph: 'government' as const,
+    title: 'Dövlət və ictimai sektor',
+    body: 'Vətəndaş xidmətlərinin avtomatlaşdırılması, sənəd emalı və siyasət tədqiqatları.',
+  },
+  {
+    glyph: 'enterprise' as const,
+    title: 'Müəssisə',
+    body: 'Müştəri dəstəyi, biliklərin idarə edilməsi və biznes zəkası sistemləri.',
+  },
+  {
+    glyph: 'education' as const,
+    title: 'Təhsil',
+    body: 'İntellektual repetitorluq, avtomatlaşdırılmış qiymətləndirmə və məzmun yaradılması.',
+  },
+  {
+    glyph: 'media' as const,
+    title: 'Media və məzmun',
+    body: 'Geniş miqyasda məzmun yaradılması, tərcümə keyfiyyətinin yoxlanılması və jurnalistika.',
+  },
+  {
+    glyph: 'legal' as const,
+    title: 'Hüquq və uyğunluq',
+    body: 'Müqavilə analizi, tənzimləyici sənədlərin emalı və hüquqi araşdırma.',
+  },
+  {
+    glyph: 'health' as const,
+    title: 'Səhiyyə',
+    body: 'Tibbi sənədləşmə, xəstə ünsiyyəti və klinik qərarların dəstəklənməsi.',
+  },
+]
 
 export default function AboutPage() {
-  const heroPatternRef = useRef<HTMLDivElement>(null)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible')
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    )
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const target = entry.target as HTMLElement
-          target.style.opacity = '1'
-          target.style.transform = 'translateY(0)'
-        }
-      })
-    }, observerOptions)
-
-    const elementsToObserve = document.querySelectorAll('.stat-item, .data-card, .app-card, .bar-item')
-    elementsToObserve.forEach(el => {
-      const htmlEl = el as HTMLElement
-      htmlEl.style.opacity = '0'
-      htmlEl.style.transform = 'translateY(30px)'
-      htmlEl.style.transition = 'opacity 0.6s ease, transform 0.6s ease'
-      observer.observe(htmlEl)
-    })
-
-    const handleScroll = () => {
-      const scrolled = window.pageYOffset
-      if (heroPatternRef.current) {
-        heroPatternRef.current.style.transform = `translate(-50%, -50%) rotate(${scrolled * 0.02}deg)`
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => {
-      observer.disconnect()
-      window.removeEventListener('scroll', handleScroll)
-    }
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el))
+    return () => observer.disconnect()
   }, [])
 
   const handleNavClick = (e: React.MouseEvent, id: string) => {
     const target = document.getElementById(id)
     if (target) {
       e.preventDefault()
+      setMenuOpen(false)
       target.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }
 
   return (
-    <div className={`landing-body ${cormorant.variable}`}>
+    <div className="landing-body">
+      {/* Without JS the observer never adds .is-visible, so reveal the content outright. */}
+      <noscript>
+        <style>{`.reveal { opacity: 1 !important; transform: none !important; }`}</style>
+      </noscript>
+
       {/* Navigation */}
-      <nav className="landing-nav">
-        <a href="/" className="logo" style={{ textDecoration: 'none' }}>ALMAZ<span>.</span></a>
-        <ul className="nav-links">
-          <li><a href="/about" style={{ color: 'var(--gold)' }}>Haqqımızda</a></li>
-          <li><a href="#data" onClick={(e) => handleNavClick(e, 'data')}>Məlumat</a></li>
-          <li><a href="#benchmarks" onClick={(e) => handleNavClick(e, 'benchmarks')}>Nəticələr</a></li>
-          <li><a href="#applications" onClick={(e) => handleNavClick(e, 'applications')}>Tətbiqlər</a></li>
+      <nav className={`landing-nav${menuOpen ? ' is-menu-open' : ''}`}>
+        <a href="/" className="logo" style={{ textDecoration: 'none' }}>
+          ALMAZ<span>.</span>
+        </a>
+        <ul className={`nav-links${menuOpen ? ' is-open' : ''}`} id="nav-links">
+          <li>
+            <a href="/about" style={{ color: 'var(--gold)' }}>
+              Haqqımızda
+            </a>
+          </li>
+          <li>
+            <a href="#data" onClick={(e) => handleNavClick(e, 'data')}>
+              Məlumat
+            </a>
+          </li>
+          <li>
+            <a href="#benchmarks" onClick={(e) => handleNavClick(e, 'benchmarks')}>
+              Nəticələr
+            </a>
+          </li>
+          <li>
+            <a href="#applications" onClick={(e) => handleNavClick(e, 'applications')}>
+              Tətbiqlər
+            </a>
+          </li>
         </ul>
-        <a href="/" className="nav-cta">Başla</a>
+        <a href="/" className="nav-cta">
+          Başla
+        </a>
+        <button
+          type="button"
+          className="nav-toggle"
+          aria-expanded={menuOpen}
+          aria-controls="nav-links"
+          aria-label={menuOpen ? 'Menyunu bağla' : 'Menyunu aç'}
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+            {menuOpen ? (
+              <>
+                <path d="M5 5 L19 19" />
+                <path d="M19 5 L5 19" />
+              </>
+            ) : (
+              <>
+                <path d="M3 7 H21" />
+                <path d="M3 12 H21" />
+                <path d="M3 17 H21" />
+              </>
+            )}
+          </svg>
+        </button>
       </nav>
 
       {/* Page Header */}
-      <section style={{
-        minHeight: '42vh',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlign: 'center',
-        padding: '10rem 2rem 5rem',
-        position: 'relative',
-        overflow: 'hidden'
-      }}>
+      <section
+        style={{
+          minHeight: '42vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          textAlign: 'center',
+          padding: '10rem 2rem 5rem',
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+      >
         <div className="hero-bg" />
-        <div className="hero-pattern" ref={heroPatternRef} />
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: '700px' }}>
-          <span className="section-label" style={{ marginBottom: '1.5rem', display: 'block' }}>Haqqımızda</span>
-          <h1 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
-            fontWeight: 300,
-            lineHeight: 1.1,
-            marginBottom: '1.5rem',
-            color: 'var(--pearl)'
-          }}>
-            Azərbaycan dilini <span style={{ color: 'var(--gold)', fontStyle: 'italic' }}>dərindən</span><br />anlayan süni intellekt
+        <div className="hero-pattern" />
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: '760px' }}>
+          <span className="section-label" style={{ marginBottom: '1.5rem', display: 'block' }}>
+            Haqqımızda
+          </span>
+          <h1
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
+              fontWeight: 600,
+              letterSpacing: '-0.025em',
+              textWrap: 'balance',
+              lineHeight: 1.08,
+              marginBottom: '1.5rem',
+              color: 'var(--pearl)',
+            }}
+          >
+            Azərbaycan dilini{' '}
+            <span
+              style={{
+                background: 'linear-gradient(96deg, var(--gold), var(--saffron))',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                color: 'transparent',
+              }}
+            >
+              dərindən
+            </span>
+            <br />
+            anlayan süni intellekt
           </h1>
-          <p style={{
-            fontFamily: 'var(--font-sans)',
-            fontSize: '1.1rem',
-            color: 'var(--silver)',
-            fontWeight: 300,
-            lineHeight: 1.7
-          }}>
+          <p
+            style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: '1.15rem',
+              color: 'var(--silver)',
+              fontWeight: 300,
+              lineHeight: 1.7,
+            }}
+          >
             10 milyondan çox insanın danışdığı dil üçün yerli olaraq yaradılmış birinci peşəkar dil modeli.
           </p>
         </div>
@@ -115,21 +268,21 @@ export default function AboutPage() {
       {/* Stats Section */}
       <section className="stats">
         <div className="stats-grid">
-          <div className="stat-item">
+          <div className="stat-item reveal">
             <div className="stat-number">38,139</div>
-            <div className="stat-label">Benchmark sualları</div>
+            <div className="stat-label">TUMLU benchmark sualı, 11 fənn üzrə</div>
           </div>
-          <div className="stat-item">
+          <div className="stat-item reveal">
             <div className="stat-number">4.6×</div>
-            <div className="stat-label">Səmərəlilik artımı</div>
+            <div className="stat-label">Daha az token, eyni Azərbaycan mətni üçün</div>
           </div>
-          <div className="stat-item">
+          <div className="stat-item reveal">
+            <div className="stat-number">651M</div>
+            <div className="stat-label">Söz — əsas təlim korpusu</div>
+          </div>
+          <div className="stat-item reveal">
             <div className="stat-number">11</div>
-            <div className="stat-label">Bilik sahəsi</div>
-          </div>
-          <div className="stat-item">
-            <div className="stat-number">110%</div>
-            <div className="stat-label">Hədəf keçildi</div>
+            <div className="stat-label">Qiymətləndirilmiş bilik sahəsi</div>
           </div>
         </div>
       </section>
@@ -144,12 +297,17 @@ export default function AboutPage() {
             <div className="about-diamond"></div>
           </div>
           <div className="about-content">
-            <h2>Azərbaycan dilində <span>düşünən</span> süni intellekt</h2>
+            <h2>
+              Azərbaycan dilində <span>düşünən</span> süni intellekt
+            </h2>
             <p>
-              Uzun müddətdir ki, 10 milyondan çox insanın danışdığı Azərbaycan dili süni intellekt tərəfindən kifayət qədər diqqət görmürdü. Qlobal modellər ona sonradan əlavə edilmiş bir dil kimi yanaşır, sözləri parçalayır və Şərqlə Qərbin kəsişməsində yerləşən bu xalqın zəngin linqvistik irsini tam dərk etmir.
+              Uzun müddətdir ki, 10 milyondan çox insanın danışdığı Azərbaycan dili süni intellekt tərəfindən kifayət
+              qədər diqqət görmürdü. Qlobal modellər ona sonradan əlavə edilmiş bir dil kimi yanaşır, sözləri parçalayır
+              və Şərqlə Qərbin kəsişməsində yerləşən bu xalqın zəngin linqvistik irsini tam dərk etmir.
             </p>
             <p>
-              ALMAZ bunu dəyişir. Azərbaycan dilinin unikal simvollarını, aqqlütinativ morfologiyasını və mədəni kontekstini anlamaq üçün süni intellektin mətn emal metodunu kökündən yenidən işlədik.
+              ALMAZ bunu dəyişir. Azərbaycan dilinin unikal simvollarını, aqqlütinativ morfologiyasını və mədəni
+              kontekstini anlamaq üçün süni intellektin mətn emal metodunu kökündən yenidən işlədik.
             </p>
             <div className="about-features">
               <div className="feature-item">
@@ -160,21 +318,27 @@ export default function AboutPage() {
                 </div>
               </div>
               <div className="feature-item">
-                <div className="feature-icon">◆</div>
+                <div className="feature-icon">
+                  <Glyph name="morphology" size={22} />
+                </div>
                 <div className="feature-text">
                   <h4>Morfoloji ustalıq</h4>
                   <p>Mürəkkəb şəkilçilər mənalı vahidlər kimi başa düşülür</p>
                 </div>
               </div>
               <div className="feature-item">
-                <div className="feature-icon">⚡</div>
+                <div className="feature-icon">
+                  <Glyph name="speed" size={22} />
+                </div>
                 <div className="feature-text">
-                  <h4>4.6× Daha səmərəli</h4>
+                  <h4>4.6× daha səmərəli</h4>
                   <p>İnqilabi tokenizator xərcləri kəskin şəkildə azaldır</p>
                 </div>
               </div>
               <div className="feature-item">
-                <div className="feature-icon">◈</div>
+                <div className="feature-icon">
+                  <Glyph name="domain" size={22} />
+                </div>
                 <div className="feature-text">
                   <h4>Sahə ekspertizası</h4>
                   <p>Hüquqi, elmi və mədəni biliklər daxil edilmişdir</p>
@@ -190,45 +354,28 @@ export default function AboutPage() {
         <div className="section-header">
           <span className="section-label">Təlim bünövrəsi</span>
           <h2>Ən yaxşı Azərbaycan mətnləri üzərində qurulub</h2>
-          <p>ALMAZ-ın zəkası süni intellekt təlimi üçün indiyə qədər toplanmış ən əhatəli Azərbaycan dili məlumat toplusuna əsaslanır.</p>
+          <p>
+            ALMAZ-ın zəkası süni intellekt təlimi üçün indiyə qədər toplanmış ən əhatəli Azərbaycan dili məlumat
+            toplusuna əsaslanır.
+          </p>
         </div>
         <div className="data-cards">
-          <div className="data-card">
-            <div className="data-card-icon">📚</div>
-            <h3>Əsas LLM korpusu</h3>
-            <div className="data-stat">651M+ söz</div>
-            <p>Wikipedia, xəbərlər, bloqlar, kitablar və hüquqi sənədlərdən ibarət seçilmiş korpus.</p>
-          </div>
-          <div className="data-card">
-            <div className="data-card-icon">🌐</div>
-            <h3>Veb miqyaslı kolleksiya</h3>
-            <div className="data-stat">94M söz</div>
-            <p>Təmizlənmiş və təkrarlardan azad edilmiş müxtəlif veb məzmunu.</p>
-          </div>
-          <div className="data-card">
-            <div className="data-card-icon">📰</div>
-            <h3>Sənəd arxivi</h3>
-            <div className="data-stat">1.9M sənəd</div>
-            <p>Onillikləri əhatə edən xəbərlər, akademik jurnallar, kitablar və jurnallar.</p>
-          </div>
-          <div className="data-card">
-            <div className="data-card-icon">📖</div>
-            <h3>Ədəbi irs</h3>
-            <div className="data-stat">3,600+ kitab</div>
-            <p>Ümumilikdə 180 milyon sözdən ibarət klassik və müasir Azərbaycan ədəbiyyatı.</p>
-          </div>
-          <div className="data-card">
-            <div className="data-card-icon">⚖️</div>
-            <h3>Hüquqi və Qanunvericilik</h3>
-            <div className="data-stat">Tam əhatə</div>
-            <p>Qanunlar, qaydalar və konstitusiya sənədlərinin tam dəstəyi.</p>
-          </div>
-          <div className="data-card">
-            <div className="data-card-icon">🎯</div>
-            <h3>İxtisaslaşmış məlumatlar</h3>
-            <div className="data-stat">Ekspert tərəfindən seçilib</div>
-            <p>NER, təsnifat, sual-cavab üçün nəzərdə tutulmuş xüsusi məlumat setləri.</p>
-          </div>
+          {CORPUS.map((item) => (
+            <div className="data-card reveal" key={item.title}>
+              <span className="data-card-icon">
+                <Glyph name={item.glyph} size={30} />
+              </span>
+              <h3>{item.title}</h3>
+              <div className="data-stat">{item.stat}</div>
+              <p>{item.body}</p>
+              {item.share !== null && (
+                <div className="corpus-bar" aria-hidden="true">
+                  <i style={{ width: `${(item.share / CORPUS_MAX) * 100}%` }} />
+                </div>
+              )}
+              <div className="corpus-cap">{item.caption}</div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -236,70 +383,44 @@ export default function AboutPage() {
       <section className="benchmark" id="benchmarks">
         <div className="benchmark-content">
           <div className="benchmark-text">
-            <h2><span>Gold-Standard</span> Benchmarklar tərəfindən təsdiqlənib</h2>
+            <h2>
+              <span>Gold-standard</span> benchmarklar tərəfindən təsdiqlənib
+            </h2>
             <p>
-              ALMAZ, 11 akademik fənn üzrə 38,139 yerli sualı özündə birləşdirən TUMLU benchmarkı ilə yoxlanılıb. Tərcümə yoxdur, süni məlumat yoxdur. Ekspertlər tərəfindən təsdiqlənmiş real Azərbaycan məzmunu.
+              ALMAZ, 11 akademik fənn üzrə 38,139 yerli sualı özündə birləşdirən TUMLU benchmarkı ilə yoxlanılıb.
+              Tərcümə yoxdur, süni məlumat yoxdur. Ekspertlər tərəfindən təsdiqlənmiş real Azərbaycan məzmunu.
             </p>
             <ul className="benchmark-list">
-              <li>
-                <span className="benchmark-name">Riyaziyyat və Məntiq</span>
-                <span className="benchmark-value">+12%</span>
-              </li>
-              <li>
-                <span className="benchmark-name">Elm və Texnologiya</span>
-                <span className="benchmark-value">+14%</span>
-              </li>
-              <li>
-                <span className="benchmark-name">Tarix və Mədəniyyət</span>
-                <span className="benchmark-value">+11%</span>
-              </li>
-              <li>
-                <span className="benchmark-name">Hüquq və Hökumət</span>
-                <span className="benchmark-value">+15%</span>
-              </li>
-              <li>
-                <span className="benchmark-name">Dil və Ədəbiyyat</span>
-                <span className="benchmark-value">+13%</span>
-              </li>
+              {TARGETS.map((item) => (
+                <li key={item.name}>
+                  <span className="benchmark-name">{item.name}</span>
+                  <span className="benchmark-value">{item.target}</span>
+                </li>
+              ))}
             </ul>
+            <p style={{ fontSize: '0.85rem', color: 'var(--muted)', marginTop: '1rem', marginBottom: 0 }}>
+              Bütün hədəflərə çatıldı. Fərqli ölçü vahidləri olduğu üçün bu göstəricilər sütun kimi deyil, hədəf
+              dəyəri ilə göstərilir.
+            </p>
           </div>
           <div className="benchmark-visual">
             <div className="benchmark-bars">
-              <div className="bar-item">
-                <div className="bar-label">
-                  <span>Tokenization Fertility</span>
-                  <span>≤2.2 hədəfə çatıldı</span>
+              {DISCIPLINES.map((item) => (
+                <div className="bar-item reveal" key={item.name}>
+                  <div className="bar-label">
+                    <span>{item.name}</span>
+                    <span>+{item.delta}%</span>
+                  </div>
+                  <div className="bar-track">
+                    <div className="bar-fill" style={{ width: `${(item.delta / AXIS_MAX) * 100}%` }} />
+                    <span className="bar-zero" aria-hidden="true" />
+                  </div>
                 </div>
-                <div className="bar-track">
-                  <div className="bar-fill" style={{ width: '95%' }}></div>
-                </div>
-              </div>
-              <div className="bar-item">
-                <div className="bar-label">
-                  <span>TUMLU Composite Score</span>
-                  <span>+10% baseline ilə müqayisədə</span>
-                </div>
-                <div className="bar-track">
-                  <div className="bar-fill" style={{ width: '88%' }}></div>
-                </div>
-              </div>
-              <div className="bar-item">
-                <div className="bar-label">
-                  <span>Instruction Following</span>
-                  <span>≥85% uyğunluq</span>
-                </div>
-                <div className="bar-track">
-                  <div className="bar-fill" style={{ width: '92%' }}></div>
-                </div>
-              </div>
-              <div className="bar-item">
-                <div className="bar-label">
-                  <span>NLU Task Performance</span>
-                  <span>+8% kompozit</span>
-                </div>
-                <div className="bar-track">
-                  <div className="bar-fill" style={{ width: '85%' }}></div>
-                </div>
+              ))}
+              <div className="bar-scale" aria-hidden="true">
+                <span>0%</span>
+                <span>baseline üzərində fərq</span>
+                <span>+{AXIS_MAX}%</span>
               </div>
             </div>
           </div>
@@ -311,39 +432,21 @@ export default function AboutPage() {
         <div className="section-header">
           <span className="section-label">İstifadə sahələri</span>
           <h2>Real dünya təsiri üçün yaradılıb</h2>
-          <p>Dövlət xidmətlərindən müəssisə avtomatlaşdırılmasına qədər ALMAZ Azərbaycanın rəqəmsal təcrübələrini gücləndirir.</p>
+          <p>
+            Dövlət xidmətlərindən müəssisə avtomatlaşdırılmasına qədər ALMAZ Azərbaycanın rəqəmsal təcrübələrini
+            gücləndirir.
+          </p>
         </div>
         <div className="apps-grid">
-          <div className="app-card">
-            <div className="app-icon">🏛️</div>
-            <h3>Dövlət və İctimai Sektor</h3>
-            <p>Vətəndaş xidmətlərinin avtomatlaşdırılması, sənəd emalı və siyasət tədqiqatları.</p>
-          </div>
-          <div className="app-card">
-            <div className="app-icon">🏢</div>
-            <h3>Müəssisə</h3>
-            <p>Müştəri dəstəyinin avtomatlaşdırılması, biliklərin idarə edilməsi və biznes zəkası sistemləri.</p>
-          </div>
-          <div className="app-card">
-            <div className="app-icon">🎓</div>
-            <h3>Təhsil</h3>
-            <p>İntellektual repetitorluq, avtomatlaşdırılmış qiymətləndirmə və təhsil məzmununun yaradılması.</p>
-          </div>
-          <div className="app-card">
-            <div className="app-icon">📰</div>
-            <h3>Media və Məzmun</h3>
-            <p>Geniş miqyasda məzmun yaradılması, tərcümə keyfiyyətinin yoxlanılması və avtomatlaşdırılmış jurnalistika.</p>
-          </div>
-          <div className="app-card">
-            <div className="app-icon">⚖️</div>
-            <h3>Hüquq və Uyğunluq</h3>
-            <p>Müqavilə analizi, tənzimləyici sənədlərin emalı və hüquqi araşdırmaların avtomatlaşdırılması.</p>
-          </div>
-          <div className="app-card">
-            <div className="app-icon">🏥</div>
-            <h3>Səhiyyə</h3>
-            <p>Tibbi sənədləşmə, xəstə ünsiyyəti və klinik qərarların dəstəklənməsi.</p>
-          </div>
+          {APPLICATIONS.map((item) => (
+            <div className="app-card reveal" key={item.title}>
+              <span className="app-icon">
+                <Glyph name={item.glyph} size={30} />
+              </span>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -351,11 +454,17 @@ export default function AboutPage() {
       <section className="cta-section">
         <div className="cta-bg"></div>
         <div className="cta-content">
-          <h2><span>ALMAZ</span> ilə qurmağa hazırsınız?</h2>
+          <h2>
+            <span>ALMAZ</span> ilə qurmağa hazırsınız?
+          </h2>
           <p>Məhsullarına və xidmətlərinə Azərbaycan dilində süni intellekt gətirən təşkilatlara qoşulun.</p>
           <div className="hero-cta-group">
-            <a href="/" className="btn-primary">Giriş əldə edin</a>
-            <a href="mailto:contact@almaz.ai" className="btn-secondary">Əlaqə saxlayın</a>
+            <a href="/" className="btn-primary">
+              Giriş əldə edin
+            </a>
+            <a href="mailto:contact@almaz.ai" className="btn-secondary">
+              Əlaqə saxlayın
+            </a>
           </div>
         </div>
       </section>

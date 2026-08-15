@@ -1,9 +1,29 @@
 import type { Metadata } from 'next'
-import { Inter, Open_Sans } from 'next/font/google'
+import { Fraunces, IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google'
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
-const openSans = Open_Sans({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700'], variable: '--font-open-sans' })
+/* 'latin-ext' is required, not optional: the Azerbaijani letters ə (U+0259),
+   ğ (U+011F), ş (U+015F) and İ (U+0130) live there, and the 'latin' subset
+   stops at U+00FF. Without it they fall back to a system serif mid-word. */
+const fraunces = Fraunces({
+  subsets: ['latin', 'latin-ext'],
+  display: 'swap',
+  variable: '--font-fraunces',
+})
+
+const plexSans = IBM_Plex_Sans({
+  subsets: ['latin', 'latin-ext'],
+  weight: ['300', '400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-plex-sans',
+})
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ['latin', 'latin-ext'],
+  weight: ['400', '500'],
+  display: 'swap',
+  variable: '--font-plex-mono',
+})
 
 export const metadata: Metadata = {
   title: 'ALMAZ — Native Azerbaijani AI',
@@ -16,7 +36,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="az" className={`${inter.variable} ${openSans.variable}`}>
+    <html
+      lang="az"
+      className={`${fraunces.variable} ${plexSans.variable} ${plexMono.variable}`}
+    >
       <body className="min-h-screen">
         {children}
       </body>
