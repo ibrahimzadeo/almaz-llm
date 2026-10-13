@@ -10,9 +10,10 @@ import '../landing.css'
    papers are out; the page states relative and operational facts only. */
 
 const STATS = [
-  // TODO(verify before publishing): Chinar F ~31.7% vs the commercial cloud API's ~43.3% WER
-  // on human-transcribed calls (the API was scored on a 147-clip subset). ~27% relative.
-  { number: '~25%', label: 'daha az səhv — real zəng mərkəzi danışığında, beynəlxalq bulud xidməti ilə müqayisədə' },
+  // Paired on the same 147 human-transcribed call clips (2026-10-13, score_kit.py): Chinar F
+  // (F8 v5f, as served) 33.20% WER vs the cloud API 43.29%, difference -10.09 points,
+  // 95% CI [-12.79, -7.49]. 10.09 / 43.29 = 23% fewer errors.
+  { number: '23%', label: 'daha az səhv — real zəng mərkəzi danışığında, beynəlxalq bulud xidməti ilə müqayisədə' },
   { number: '8 kHz', label: 'telefon səsi üçün xüsusi öyrədilib — studiya yazısı üçün yox' },
   { number: '100%', label: 'məlumat sizin serverlərinizdə qalır — heç bir zəng xaricə göndərilmir' },
   // Chinar P greedy decoding: real-time factor 0.038 on four CPU cores = ~26x faster than real time.
