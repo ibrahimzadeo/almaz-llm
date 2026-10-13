@@ -63,6 +63,12 @@ export default function HomePage() {
         </div>
         <div className="flex items-center gap-6">
           <a
+            href="/chinar"
+            className="text-xs text-[#B6BEE0] hover:text-[#FF4D2E] uppercase tracking-widest transition-colors"
+          >
+            Chinar
+          </a>
+          <a
             href="/about"
             className="text-xs text-[#B6BEE0] hover:text-[#FF4D2E] uppercase tracking-widest transition-colors"
           >

@@ -22,6 +22,9 @@ export type GlyphName =
   | 'morphology'
   | 'speed'
   | 'domain'
+  | 'speech'
+  | 'phone'
+  | 'shield'
 
 const PATHS: Record<GlyphName, React.ReactNode> = {
   // Nested lozenges — the master mark, used for the primary corpus
@@ -136,6 +139,27 @@ const PATHS: Record<GlyphName, React.ReactNode> = {
     <>
       <path d="M12 2 L22 12 L12 22 L2 12 Z" />
       <path d="M13.5 6.5 L9 12.5 H12 L10.5 17.5 L15 11.5 H12 Z" />
+    </>
+  ),
+  // Lozenge carrying a waveform — speech recognition
+  speech: (
+    <>
+      <path d="M12 2 L22 12 L12 22 L2 12 Z" />
+      <path d="M7.5 12 V12.01 M9.75 10 V14 M12 7.5 V16.5 M14.25 10 V14 M16.5 12 V12.01" />
+    </>
+  ),
+  // Handset inside the lozenge — telephone audio
+  phone: (
+    <>
+      <path d="M12 2 L22 12 L12 22 L2 12 Z" />
+      <path d="M9 8.5 C9 13 11 15 15.5 15 L15.5 13.3 L13.6 12.8 L12.9 13.6 C11.6 13 11 12.4 10.4 11.1 L11.2 10.4 L10.7 8.5 Z" />
+    </>
+  ),
+  // Shield cut from the lozenge — data stays on your servers
+  shield: (
+    <>
+      <path d="M12 2.5 L19.5 6 V12 C19.5 16.5 16.3 19.6 12 21.5 C7.7 19.6 4.5 16.5 4.5 12 V6 Z" />
+      <path d="M12 8 L15 11 L12 14 L9 11 Z" />
     </>
   ),
   // Layered strata

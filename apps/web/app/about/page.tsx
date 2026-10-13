@@ -162,6 +162,9 @@ export default function AboutPage() {
             </a>
           </li>
           <li>
+            <a href="/chinar">Chinar</a>
+          </li>
+          <li>
             <a href="#data" onClick={(e) => handleNavClick(e, 'data')}>
               Məlumat
             </a>
@@ -477,6 +480,7 @@ export default function AboutPage() {
             <div className="footer-tagline">Azərbaycan dilində danışan AI. Yerli olaraq.</div>
           </div>
           <div className="footer-links">
+            <a href="/chinar">Chinar</a>
             <a href="#">Sənədlər</a>
             <a href="#">API İstinad</a>
             <a href="#">Tədqiqat</a>
