@@ -13,7 +13,7 @@ const STATS = [
   // Paired on the same 147 human-transcribed call clips (2026-10-13, score_kit.py): Chinar F
   // (F8 v5f, as served) 33.20% WER vs the cloud API 43.29%, difference -10.09 points,
   // 95% CI [-12.79, -7.49]. 10.09 / 43.29 = 23% fewer errors.
-  { number: '23%', label: 'daha az səhv — real zəng mərkəzi danışığında, beynəlxalq bulud xidməti ilə müqayisədə' },
+  { number: '23%', label: 'daha az səhv (Chinar F) — real zəng mərkəzi danışığında, beynəlxalq bulud xidməti ilə müqayisədə' },
   { number: '8 kHz', label: 'telefon səsi üçün xüsusi öyrədilib — studiya yazısı üçün yox' },
   { number: '100%', label: 'məlumat sizin serverlərinizdə qalır — heç bir zəng xaricə göndərilmir' },
   // Chinar P greedy decoding: real-time factor 0.038 on four CPU cores = ~26x faster than real time.
@@ -116,7 +116,7 @@ const BENEFITS = [
 const COMPARE: { row: string; f: string; l: string; p: string }[] = [
   { row: 'Telefon zənglərində dəqiqlik', f: 'Ən yüksək', l: 'Yüksək', p: 'Bulud səviyyəsində' },
   { row: 'Oxunaqlı mətn (durğu, rəqəm)', f: 'Əsas', l: 'Ən yaxşı', p: 'Yaxşı' },
-  { row: 'Avadanlıq', f: 'CPU və ya GPU', l: 'GPU', p: 'Yalnız CPU' },
+  { row: 'Avadanlıq', f: 'CPU və ya GPU', l: 'GPU', p: 'CPU və ya GPU — GPU şərt deyil' },
   { row: 'Böyük həcmlərdə xərc', f: 'Ən aşağı', l: 'Orta', p: 'Aşağı' },
 ]
 
